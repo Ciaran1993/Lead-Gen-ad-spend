@@ -1,0 +1,35 @@
+import streamlit as st
+
+def calculate_leads(ad_spend, cost_per_lead):      
+    if cost_per_lead <= 0:
+        return "Cost per lead must be greater than 0"
+    return ad_spend / cost_per_lead
+
+def calculate_conversion(leads, conversion_rate):
+    return leads * (conversion_rate / 100)
+
+def calculate_revenue(conversions, average_sale_value):
+    return conversions * average_sale_value
+
+def calculate_roi(revenue, ad_spend):
+    return ((revenue - ad_spend) / ad_spend) * 100 if ad_spend > 0 else 0
+
+st.title("Lead Generation, Conversion, and ROI Calculator")
+
+# User Inputs
+ad_spend = st.number_input("Enter your total ad spend ($):", min_value=0.0, value=500.0, step=50.0)
+cost_per_lead = st.number_input("Enter your estimated cost per lead ($):", min_value=1.0, value=10.0, step=0.5)
+conversion_rate = st.number_input("Enter your conversion rate (%):", min_value=0.0, value=10.0, step=0.5)
+average_sale_value = st.number_input("Enter your average sale value ($):", min_value=0.0, value=100.0, step=10.0)
+
+# Calculation
+if st.button("Calculate Metrics"):
+    leads_generated = calculate_leads(ad_spend, cost_per_lead)
+    conversions = calculate_conversion(leads_generated, conversion_rate)
+    revenue = calculate_revenue(conversions, average_sale_value)
+    roi = calculate_roi(revenue, ad_spend)
+    
+    st.success(f"Estimated Leads Generated: {leads_generated:.0f}")
+    st.success(f"Estimated Conversions (Sales): {conversions:.0f}")
+    st.success(f"Estimated Revenue: ${revenue:.2f}")
+    st.success(f"Estimated ROI: {roi:.2f}%")
